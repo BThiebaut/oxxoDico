@@ -40,7 +40,7 @@
   </header>
 
   <div class="container">
-    <main>
+    <main class="mb-3">
       <h1>Dictionnary</h1>
       <div class="row">
         <table class="datatable">
@@ -62,6 +62,21 @@
             <th></th>
           </tfoot>
         </table>
+      </div>
+      <div>
+        <h2>Translate tool</h2>
+        <form class="form-inline">
+          <div class="form-group mb-2">
+            <label for="trans" class="sr-only">Sentence</label>
+            <input type="text" class="form-control" id="trans" placeholder="Type your sentence here...">
+          </div>
+          <button type="button" id="transAction" class="btn btn-primary mb-2 ml-1">Translate</button>
+        </form>
+        <h3>Result :</h3>
+        <hr/>
+        <div id="transResult"></div>
+        <hr/>
+        <small class="help-block">word between [braces] are missing word in the dictionnary. <a href="#" onclick="requestAdd();">Add them !</a></small>
       </div>
     </main>
   </div>

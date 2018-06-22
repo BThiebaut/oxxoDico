@@ -56,7 +56,6 @@ function applyListe(){
 }
 
 function applyAdd(){
-  console.log('applyadd');
   mainWindow.loadFile('./app/add.html');
 }
 

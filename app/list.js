@@ -43,7 +43,49 @@ function proceed(){
                     .search(this.value, true, false)
                     .draw();
             }
-        } );
-    } );
+        });
+      });
     }
+
+  $('#transAction').off('click');
+  $('#transAction').on('click', function(){
+    translate();
+  });
 }
+
+function translate(){
+ var input = document.getElementById('trans');
+ console.log('start translation', input.value);
+ var container = document.getElementById('transResult');
+ if (input.value){
+   var result = [];
+   var words = input.value.split(' ');
+   $.each(words, function(index, inVal){
+     var match = null;
+     $.each(entries, function(word, definitions){
+        if (definitions.indexOf(inVal.trim().toLowerCase()) > -1){
+          match = word;
+          return false;
+        }
+     });
+     if (match == null){
+       result.push('['+inVal+']');
+     }else {
+       result.push(match);
+     }
+   });
+   console.log('end translation', result);
+   
+   container.innerText = result.join(' ');
+ }
+}
+
+function requestList(){
+  ipcRenderer.send('requestList');
+}
+
+function requestAdd(){
+  ipcRenderer.send('requestAdd');
+}
+
+
