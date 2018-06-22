@@ -4,6 +4,7 @@ var {ipcRenderer} = require('electron');
 var remote = electron.remote;
 var entries = require('../entries.json');
 var fs = require('fs');
+var utils = require('./utils');
 
 function requestList(){
   ipcRenderer.send('requestList');
@@ -28,36 +29,26 @@ function loadEvents(){
 
 function proceedAdd (){
   console.log('start add');
-  var newword = document.getElementById('word').value;
-  var def = document.getElementById('definitions').value;
+  var newword = document.getElementById('word').value.trim().toLowerCase();
+  var def = document.getElementById('definitions').value.trim().toLowerCase();
   if (word !== '' && def !== ''){
     var arDef = def.split(',');
     // check if is already in dictionnary
-    if (typeof entries[newword] != 'undefined'){
+    if (utils.checkExistWord(newword)){
       displayError('Word ' + newword + ' already exist !');
       return false;
     }
-    $.each(arDef, function(i, cdef){
-      $.each(entries, function(word, definitions){
-        if (definitions.indexOf(cdef) > -1){
-          displayError('Definition ' + cdef + ' already exist in ' + word + '. Skipped');
-          arDef.splice(i, 1);
-          return;
-        }
-      });
-    });
+    arDef = utils.removeDuplicateDef($, arDef, displayError, null);
+
     // Save the new word
     if (arDef.length > 0){
       console.log('add ' + newword, arDef);
       entries[newword] = arDef;
-
-     fs.writeFile('./entries.json', JSON.stringify(entries, null, 2), (err) => {
-        if(err){
-          alert("An error ocurred creating the file "+ err.message)
-          return;
+      utils.saveDicoAsync(entries, function(err){
+        if (!err){
+          alert("New entry succesfully added");
+          $('input').val('');
         }
-        alert("The file has been succesfully saved");
-        $('input').val('');
       });
     }else {
       displayError('All definitions has been skipped. Action canceled');

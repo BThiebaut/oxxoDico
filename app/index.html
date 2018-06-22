@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <script>window.$ = window.jQuery = require('jquery');</script>
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
-    <script>window.$ = window.jQuery = require('jquery');</script>
     <script type="text/javascript" src="./list.js"></script>
   </head>
   <body>
@@ -52,12 +52,16 @@
               <th>
                 Signification
               </th>
+              <th>
+                Action
+              </th>
             </tr>
           </thead>
           <tbody id="listContainer">
 
           </tbody>
           <tfoot>
+            <th></th>
             <th></th>
             <th></th>
           </tfoot>
@@ -79,6 +83,39 @@
         <small class="help-block">word between [braces] are missing word in the dictionnary. <a href="#" onclick="requestAdd();">Add them !</a></small>
       </div>
     </main>
+  </div>
+  <div class="modal fade" id="editModale" tabindex="-1" role="dialog" aria-labelledby="Edit" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit entry</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div id="modal-content" class="row">
+            <form>
+                <div class="form-group">
+                  <label for="identifiant">Word</label>
+                  <input type="text" class="form-control" id="word" placeholder="word">
+                </div>
+                <div class="form-group">
+                  <label for="identifiant">Definitions (with ',' separator)</label>
+                  <input type="text" class="form-control" id="definitions" placeholder="definitions">
+                </div>
+              </div>
+              <div id="errorContainer" class="alert alert-danger d-none" role="alert"></div>
+            </form>
+          </div>
+          <div class="d-none" id="modal-word"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" id="editBtnAction" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
   </div>
   <script>
     $(function(){

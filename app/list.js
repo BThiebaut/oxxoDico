@@ -3,7 +3,8 @@ var BrowserWindow = electron.BrowserWindow;
 var {ipcRenderer} = require('electron');
 var remote = electron.remote;
 var entries = require('../entries.json');
-
+var modalId = '#editModale';
+var utils   = require('./utils');
 
 function proceed(){
 
@@ -22,6 +23,9 @@ function proceed(){
         strHtml += '</td>';
         strHtml += '<td>';
           strHtml += definitions.join(',');
+        strHtml += '</td>';
+        strHtml += '<td>';
+          strHtml += '<button type="button" class="btn btn-xs editBtn" data-word="'+ index +'"><i class="material-icons">edit</i></button>'
         strHtml += '</td>';
       strHtml += '</tr>';
     });
@@ -51,6 +55,12 @@ function proceed(){
   $('#transAction').on('click', function(){
     translate();
   });
+
+  $('.editBtn').off('click');
+  $('.editBtn').on('click', function(){
+    var word = $(this).data('word');
+    editWord(word);
+  });
 }
 
 function translate(){
@@ -78,6 +88,35 @@ function translate(){
    
    container.innerText = result.join(' ');
  }
+}
+
+function displayError(msg){
+  var container = document.getElementById('errorContainer');
+  $(container).removeClass('d-none');
+  container.innerText += '<br/>' + msg;
+}
+
+function editWord(word){
+  var modal = $(modalId);
+  var entry = entries[word];
+  $('#word').val(word);
+  $('#modal-word').data('word', word);
+  $('#definitions').val(entry.join(','));
+  modal.modal('show');
+  
+  $('#editBtnAction').off('click');
+  $('#editBtnAction').on('click', function(){
+    var editWord = $('#word').val();
+    var editDef  = $('#definitions').val();
+    if (editWord !== '' && editDef !== ''){
+      var arDef = editDef.split(',');
+      if (utils.checkExistWord(newword)){
+        displayError('Word ' + newword + ' already exist !');
+        return false;
+      }
+      arDef = utils.removeDuplicateDef($, arDef, displayError, null);
+    }
+  });
 }
 
 function requestList(){
